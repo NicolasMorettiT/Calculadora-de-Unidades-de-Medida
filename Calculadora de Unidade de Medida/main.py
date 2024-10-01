@@ -96,15 +96,14 @@ def mostrar_menu(categoria):
         # Obtendo as unidades
         origem = c_de.get()
         destino = c_para.get()
-        
+
         try:
             # Obtendo o número
             valor = float(e_numero.get())
         except ValueError:
             l_resultado['text'] = "Entrada inválida"
             return
-        
-                
+
         if categoria == 'temperatura':
             try:
                 resultado = converter_temperatura(valor, origem, destino)
@@ -112,8 +111,15 @@ def mostrar_menu(categoria):
                 l_resultado['text'] = "Unidade inválida"
                 return
         else:
-            a_val = unidade_valores.get(origem)
-            b_val = unidade_valores.get(destino)
+            # Encontrar os valores de conversão para as unidades de origem e destino
+            a_val = None
+            b_val = None
+
+            for unidade in unidades[categoria]:
+                if origem in unidade:
+                    a_val = unidade[origem]
+                if destino in unidade:
+                    b_val = unidade[destino]
 
             if a_val is None or b_val is None:
                 l_resultado['text'] = "Unidade inválida"
@@ -127,7 +133,7 @@ def mostrar_menu(categoria):
 
         # Formatar o resultado com 4 casas decimais
         l_resultado['text'] = f"{resultado:.2f} {destino}"
-    
+        
     # ---------- Criando Label, Botao, Entrada
 
     l_info = Label(frame_direita, text='Digite o número:',padx=0, pady=3, width = 17, height=2, relief=FLAT, anchor=NW, font=('Ivy 14 bold'), bg=cor2, fg=cor1 )
